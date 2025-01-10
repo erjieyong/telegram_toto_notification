@@ -1,10 +1,11 @@
-from bs4 import BeautifulSoup
-import requests
-import json
-from telegram import Bot
 import asyncio
-from dotenv import load_dotenv
+import json
 import os
+
+import requests
+from bs4 import BeautifulSoup
+from telegram import Bot
+from dotenv import load_dotenv
 
 load_dotenv()
 
