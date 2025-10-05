@@ -52,14 +52,42 @@ def get_toto_jackpot():
 
 async def send_notification(prize):
     """
-    Sends a notification via Telegram if the prize exceeds the threshold.
+    Sends a notification via Telegram to all configured chat IDs if the prize exceeds the threshold.
+    Supports multiple chat IDs separated by commas in the CHAT_ID environment variable.
     """
     try:
         if prize >= int(os.environ["PRIZE_THRESHOLD"]):
             message = f"The upcoming TOTO prize is SGD {prize:,}! Don't miss out!"
             bot = Bot(token=os.environ["BOT_TOKEN"])
-            await bot.send_message(chat_id=os.environ["CHAT_ID"], text=message)
-            print("Message sent successfully")
+
+            # Parse chat IDs from environment variable (supports comma-separated list)
+            chat_ids_str = os.environ["CHAT_ID"]
+            chat_ids = [chat_id.strip() for chat_id in chat_ids_str.split(",")]
+
+            # Track success and failures
+            successful_sends = []
+            failed_sends = []
+
+            # Send to each chat ID independently
+            for chat_id in chat_ids:
+                try:
+                    await bot.send_message(chat_id=chat_id, text=message)
+                    successful_sends.append(chat_id)
+                    print(f"Message sent successfully to chat ID: {chat_id}")
+                except Exception as chat_error:
+                    failed_sends.append(chat_id)
+                    print(f"Error sending message to chat ID {chat_id}: {chat_error}")
+
+            # Summary logging
+            if successful_sends:
+                print(
+                    f"Successfully sent to {len(successful_sends)} chat(s): {', '.join(successful_sends)}"
+                )
+            if failed_sends:
+                print(
+                    f"Failed to send to {len(failed_sends)} chat(s): {', '.join(failed_sends)}"
+                )
+
     except Exception as e:
         print(f"Error sending message: {e}")
 
