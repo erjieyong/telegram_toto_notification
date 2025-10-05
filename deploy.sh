@@ -21,7 +21,7 @@ ECR_REGISTRY="885894375887.dkr.ecr.ap-southeast-1.amazonaws.com"
 ECR_REPOSITORY="telegram_toto_notification"
 AWS_REGION="ap-southeast-1"
 AWS_PROFILE="personal"
-LAMBDA_FUNCTION_NAME="telegram_toto_notification"
+LAMBDA_FUNCTION_NAME="telegram_toto_notification2"
 
 # Colors for output
 RED='\033[0;31m'
